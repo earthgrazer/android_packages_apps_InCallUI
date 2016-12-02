@@ -57,10 +57,14 @@ public class ProximitySensor implements AccelerometerListener.OrientationListene
     // Gets updated whenever there is a Configuration change
     private boolean mIsHardKeyboardOpen;
 
+    // Disables use of proximity sensor to trigger screen lock if False
+    private boolean mUseProximitySensor = false;
+
     public ProximitySensor(Context context, AudioModeProvider audioModeProvider,
             AccelerometerListener accelerometerListener) {
         mPowerManager = (PowerManager) context.getSystemService(Context.POWER_SERVICE);
-        if (mPowerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)) {
+        if (mUseProximitySensor &&
+            mPowerManager.isWakeLockLevelSupported(PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK)) {
             mProximityWakeLock = mPowerManager.newWakeLock(
                     PowerManager.PROXIMITY_SCREEN_OFF_WAKE_LOCK, TAG);
         } else {
